@@ -17,7 +17,6 @@ export const getMatrix = (arr) => {
 }
 
 export const setPositionItems = (matrix, itemNodes) => {
-  console.log(matrix, itemNodes);
   for (let y = 0; y < matrix.length; y++) {
     for (let x = 0; x < matrix[y].length; x++) {
       const value = matrix[y][x];
@@ -30,13 +29,6 @@ export const setPositionItems = (matrix, itemNodes) => {
 export const setNodeStyles = (node, x, y) => {
   const shiftPs = 100;
   node.style.transform = `translate3D(${x * shiftPs}%, ${y * shiftPs}%, 0)`
-}
-
-export const shuffleArray = (arr) => {
-  return arr
-    .map(value => ({ value, sort: Math.random()}))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
 }
 
 export const findCoordinatesByNumber = (number, matrix) => {
@@ -88,4 +80,41 @@ export const addWonClass = () => {
       containerNode.classList.remove('fifteenWon')
     }, 1000);
   }, 200)
+}
+
+export const shuffleArray = (arr) => {
+  return arr
+    .map(value => ({ value, sort: Math.random()}))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
+
+let blockCoords = null;
+export const randomSwap = (matrix, blankNumber) => {
+  const blankCoords = findCoordinatesByNumber(blankNumber, matrix);
+  const validCoords = findValidCoords({
+    blankCoords,
+    matrix,
+    blockCoords,
+  })
+
+  const swapCoords = validCoords[Math.floor(Math.random() * validCoords.length)];
+
+  swap(blankCoords, swapCoords, matrix);
+  blockCoords = blankCoords;
+}
+
+const findValidCoords = ({ blankCoords, matrix, blockCoords}) => {
+  const validCoords = [];
+  for (let y = 0; y < matrix.length; y++) {
+    for (let x = 0; x < matrix[y].length; x++) {
+      if (isValidForSwap({x, y}, blankCoords)) {
+        if (!blockCoords || !(blockCoords.x === x && blockCoords.y === y)) {
+          validCoords.push({x, y});
+        }
+      }
+    }
+  }
+
+  return validCoords;
 }

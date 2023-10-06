@@ -1,5 +1,14 @@
-import {findCoordinatesByNumber, getMatrix, isValidForSwap, setPositionItems, shuffleArray, swap} from "./helpers.js";
+import {
+  findCoordinatesByNumber,
+  getMatrix,
+  isValidForSwap,
+  randomSwap,
+  setPositionItems,
+  shuffleArray,
+  swap
+} from "./helpers.js";
 
+const gameNode = document.getElementById('game');
 export const containerNode = document.getElementById('fifteen');
 const itemNodes = Array.from(containerNode.querySelectorAll('.item')); // convert to true array
 const countItems = 16;
@@ -19,15 +28,42 @@ setPositionItems(matrix, itemNodes); // set initial positions for elements
 
 
 /* * Shuffle */
-document.getElementById('shuffle').addEventListener('click', () => {
+/*document.getElementById('shuffle').addEventListener('click', () => {
   const shuffledArray = shuffleArray(matrix.flat());
   matrix = getMatrix(shuffledArray);
   setPositionItems(matrix, itemNodes);
+})*/
+
+/* * Smart shuffle */
+
+const maxShuffle = 50;
+let timer;
+let shuffled = false;
+document.getElementById('shuffle').addEventListener('click', () => {
+  let shuffleCount = 0;
+  clearInterval(timer);
+  gameNode.classList.add('gameShuffle');
+  shuffled = true;
+  timer = setInterval(() => {
+    randomSwap(matrix, blankNumber);
+    setPositionItems(matrix, itemNodes);
+
+    shuffleCount += 1;
+
+    if (shuffleCount >= maxShuffle) {
+      gameNode.classList.remove('gameShuffle');
+      shuffled = false;
+      clearInterval(timer);
+    }
+  }, 70)
+
 })
 
 /* * Change position by click */
 const blankNumber = 16;
 containerNode.addEventListener('click', (e) => {
+  if (shuffled) return;
+
   const button = e.target.closest('button');
 
   if (!button) return;
@@ -47,6 +83,8 @@ containerNode.addEventListener('click', (e) => {
 /* * Change position by arrows */
 
 window.addEventListener('keydown', (e) => {
+  if (shuffled) return;
+
   if (!e.key.includes('Arrow')) {
     return;
   }
