@@ -1,7 +1,8 @@
 # Игра в "Пятнашки"
 
-<img style="text-align: center; max-width: 600px;"
-src="https://github.com/din366/images/blob/main/readme%20images/fifteen.gif" alt="project image">
+<p align="center">
+  <img style="text-align: center; max-height: 500px;" src="https://github.com/din366/images/blob/main/readme%20images/fifteen.gif" alt="project image">
+</p>
 
 <a href="https://game-fifteen.vercel.app" style="text-align: center;">Развернутое приложение на Vercel</a>
 
