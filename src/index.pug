@@ -11,9 +11,16 @@ html(lang="ru")
         .page
             h1 Игра в "Пятнашки"
             .game#game
-            .fifteen#fifteen
-                each val in values
-                  button.item(data-matrix-id=val)
-                    span.itemVal= val
-            button.button#shuffle Перемешать
+                .fifteen#fifteen
+                    each val in values
+                      button.item(data-matrix-id=val)
+                        span.itemVal= val
+                button.button#shuffle Перемешать стандартно
+                button.button.shuffleParams#showShuffleParams Показать параметры
+                    img#showShuffleParamsIcon(src="./css/white-arrow.png")
+                .shuffleCountWrapper#shuffleCountWrapper
+                    input#shuffleCount(placeholder='50' type="number" value=50 min=1)
+                    button.button#shuffleCountButton На сколько ходов перемешать
         script(src="/js/index.js" type="module")
+
+

@@ -118,3 +118,4 @@ const findValidCoords = ({ blankCoords, matrix, blockCoords}) => {
 
   return validCoords;
 }
+

@@ -10,6 +10,11 @@ import {
 
 const gameNode = document.getElementById('game');
 export const containerNode = document.getElementById('fifteen');
+const paramsShuffleNode = document.getElementById('showShuffleParams');
+const paramsShuffleIconNode = document.getElementById('showShuffleParamsIcon');
+const paramsShuffleWrapperNode = document.getElementById('shuffleCountWrapper');
+const shuffleButtonCountNode = document.getElementById('shuffleCountButton');
+const shuffleInputNode = document.getElementById('shuffleCount');
 const itemNodes = Array.from(containerNode.querySelectorAll('.item')); // convert to true array
 const countItems = 16;
 
@@ -27,7 +32,7 @@ let matrix = getMatrix(
 setPositionItems(matrix, itemNodes); // set initial positions for elements
 
 
-/* * Shuffle */
+/* * Simple Shuffle */
 /*document.getElementById('shuffle').addEventListener('click', () => {
   const shuffledArray = shuffleArray(matrix.flat());
   matrix = getMatrix(shuffledArray);
@@ -36,27 +41,14 @@ setPositionItems(matrix, itemNodes); // set initial positions for elements
 
 /* * Smart shuffle */
 
-const maxShuffle = 50;
+let maxShuffle = 50;
 let timer;
 let shuffled = false;
 document.getElementById('shuffle').addEventListener('click', () => {
-  let shuffleCount = 0;
-  clearInterval(timer);
-  gameNode.classList.add('gameShuffle');
-  shuffled = true;
-  timer = setInterval(() => {
-    randomSwap(matrix, blankNumber);
-    setPositionItems(matrix, itemNodes);
-
-    shuffleCount += 1;
-
-    if (shuffleCount >= maxShuffle) {
-      gameNode.classList.remove('gameShuffle');
-      shuffled = false;
-      clearInterval(timer);
-    }
-  }, 70)
-
+  paramsShuffleIconNode.classList.remove('open');
+  paramsShuffleWrapperNode.classList.remove('shuffleCountWrapperActive');
+  maxShuffle = 50;
+  shuffleMainFunc();
 })
 
 /* * Change position by click */
@@ -81,7 +73,6 @@ containerNode.addEventListener('click', (e) => {
 })
 
 /* * Change position by arrows */
-
 window.addEventListener('keydown', (e) => {
   if (shuffled) return;
 
@@ -120,4 +111,43 @@ window.addEventListener('keydown', (e) => {
 
   swap(blankCoords, buttonCoords, matrix);
   setPositionItems(matrix, itemNodes)
+});
+
+/* * Control params block */
+paramsShuffleNode.addEventListener('click', () => {
+  paramsShuffleIconNode.classList.toggle('open');
+
+  if (paramsShuffleIconNode.classList.contains('open')) {
+    paramsShuffleWrapperNode.classList.add('shuffleCountWrapperActive');
+  } else {
+    paramsShuffleWrapperNode.classList.remove('shuffleCountWrapperActive');
+  }
 })
+
+shuffleButtonCountNode.addEventListener('click', () => {
+  if (+shuffleInputNode.value <= 0 || shuffleInputNode.value > 1000 ) return;
+  maxShuffle = +shuffleInputNode.value;
+  if (shuffleInputNode.value) {
+    shuffleMainFunc();
+  }
+})
+
+/* * Smart shuffle main function */
+function shuffleMainFunc() {
+  let shuffleCount = 0;
+  clearInterval(timer);
+  gameNode.classList.add('gameShuffle');
+  shuffled = true;
+  timer = setInterval(() => {
+    randomSwap(matrix, blankNumber);
+    setPositionItems(matrix, itemNodes);
+
+    shuffleCount += 1;
+
+    if (shuffleCount >= maxShuffle) {
+      gameNode.classList.remove('gameShuffle');
+      shuffled = false;
+      clearInterval(timer);
+    }
+  }, 70)
+}
