@@ -31,7 +31,7 @@ html {
   .shuffleCountWrapper {
     height: 0;
     overflow hidden;
-    padding: 0;
+    padding: 0 15px 0 15px;
     background-color: #c5c4c4;
     border-radius: 10px;
     display: flex;
@@ -139,5 +139,20 @@ h1 {
   body,
   html {
     font-size: 13px;
+  }
+}
+
+@media only screen and (max-width: 405px) {
+  .page {
+    .shuffleCountWrapper {
+      input {
+        margin-bottom: 10px;
+        margin-right: 0;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
   }
 }
